@@ -4,7 +4,10 @@ type: docs
 weight: 4
 ---
 
-# Varför behöver WebRTC ett särskilt delsystem för anslutning?
+# Anslutning
+
+## Varför behöver WebRTC ett särskilt delsystem för anslutning?
+
 De flesta applikationer som distribueras idag upprättar klient/serveranslutningar. En klient/serveranslutning kräver att servern har en känd och publik adress. En klient ansluter till en server, och servern svarar.
 
 WebRTC använder inte en klient/server-modell utan skapar peer-to-peer (P2P) anslutningar. I en P2P-anslutning fördelas uppgiften att skapa en anslutning lika till båda parterna. Detta beror på att en publik nätverksadress (IP och port) är inget man kan förvänta sig i WebRTC, och den kan till och med ändras mitt under sessionen. WebRTC kommer att samla så mycket information som det går, och sedan göra allt den kan för sätta upp en dubbelriktad kommunikationsväg mellan två WebRTC-agenter.
@@ -14,15 +17,19 @@ Det kan dock vara svårt att skapa peer-to-peer-anslutning. Dessa agenter kan fi
 Trots dessa svårigheter med att skapa en P2P-anslutning får du fördelar jämfört med traditionell klient/server-teknik på grund av följande funktioner WebRTC erbjuder.
 
 ### Reducerade bandbreddskostnader
+
 Eftersom mediekommunikation sker direkt mellan klienterna behöver du inte betala för eller drifta en egen server för att vidarebefordra media.
 
 ### Lägre latens
+
 Kommunikationen går snabbare när den är direkt! När en användare måste köra allt via din server gör det överföringarna långsammare.
 
 ### Säker E2E-kommunikation
+
 Direkt kommunikation är säkrare. Eftersom användarnas trafik inte går via din server, behöver de inte ens lita på att du inte dekrypterar den.
 
 ## Hur fungerar det?
+
 Processen som beskrivs ovan kallas Interactive Connectivity Establishment ([ICE](https://tools.ietf.org/html/rfc8445)). Ytterligare ett protokoll som är äldre än WebRTC.
 
 ICE är ett protokoll som försöker hitta det bästa sättet att kommunicera mellan två ICE-agenter. Varje ICE-agent publicerar hur den kan nås, dessa kallas kandidater. En kandidat är i huvudsak en nätverksadress för agenten som den tror att den andra klienten kan nå. ICE bestämmer sedan det bästa hopkopplingen av klienterna.
@@ -150,7 +157,7 @@ Data kommer att innehålla en lista med STUN-attribut. Ett STUN-attribut har fö
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                         Value (variable)                ....
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
- ```
+```
 
 Ett `STUN Binding Request` använder inga attribut. Det betyder att en `STUN Binding Request` endast innehåller en header.
 
@@ -169,7 +176,7 @@ Tyvärr kan en "mappad adress" kanske ändå inte vara användbar. Om reglerna �
 [RFC 5780](https://tools.ietf.org/html/rfc5780) definierar en metod för att göra ett test för att lista ut din NAT-typ. Detta är användbart eftersom du kan veta i förväg om direktanslutning var möjlig.
 
 ## TURN
-TURN (Traversal Using Relays around NAT) definieras i [RFC 8656] (https://tools.ietf.org/html/rfc8656) är lösningen när direktanslutning inte är möjlig. Det kan bero på att du har två NAT-typer som är oförenliga eller kanske inte kan tala samma protokoll! TURN kan också användas för sekretessändamål. Genom att köra all din kommunikation genom TURN döljer du klientens faktiska adress.
+TURN (Traversal Using Relays around NAT) definieras i [RFC 8656](https://tools.ietf.org/html/rfc8656) är lösningen när direktanslutning inte är möjlig. Det kan bero på att du har två NAT-typer som är oförenliga eller kanske inte kan tala samma protokoll! TURN kan också användas för sekretessändamål. Genom att köra all din kommunikation genom TURN döljer du klientens faktiska adress.
 
 TURN använder en dedikerad server. Denna server fungerar som en proxy för en klient. Klienten ansluter till en TURN-server och skapar en allokering (`Allocation`). Genom att skapa en allokering får en klient en tillfällig IP/port/protokoll som kan användas för att skicka trafik tillbaka till klienten. Den här nya lyssnaren kallas en `Relayed Transport Address`. Tänk på det som en vidarebefordringsadress, du använder den så att andra kan skicka dig trafik via TURN! För varje klient du ger din `Relay Transport Address` till måste du skapa ett nytt "tillstånd" (`Permission`) för att tillåta kommunikation med dig.
 
@@ -183,11 +190,11 @@ Tilldelningar är kärnan i TURN. En "allokering" är i grunden en "TURN Session
 
 När du skapar en tilldelning måste du ange följande:
 * Användarnamn/lösenord - För att skapa TURN-tilldelningar krävs autentisering
-* Allokeringstransport - Den 'vidarebefordrade transportadressen' kan vara UDP eller TCP
+* Allokeringstransport - Transportprotokollet mellan servern (`Relayed Transport Address`) och klienterna. Kan vara UDP eller TCP.
 * Even-Port - Du kan begära sekventiella portar för flera tilldelningar, inte relevanta för WebRTC.
 
 Om begäran lyckades får du svar med TURN-servern med följande STUN-attribut i Data-sektionen:
-* `XOR-MAPPED-ADRESS` - `Mappad adress` för din `TURN Client`. När någon skickar data till "Relayed Transport Address", vidarebefordras den till.
+* `XOR-MAPPED-ADRESS` - `Mappad adress` för din `TURN Client`. När någon skickar data till "Relayed Transport Address", vidarebefordras den dit.
 * `RELAYED-ADRESS` - Det här är adressen som du ger ut till andra klienter. Om någon skickar ett paket till den här adressen vidarebefordras det till TURN-klienten.
 * `LIFETIME`- Hur länge tills denna TURN-fördelning tas bort. Du kan förlänga livslängden genom att skicka ett uppdaterings anrop (`Refresh`).
 
@@ -272,9 +279,9 @@ Visuellt ser det ut så här:
 ![Anslutningskontroller](../../images/03-connectivity-checks.png "Anslutningskontroller")
 
 ### Kandidatval
-Den kontrollerande och kontrollerade agenten skickar a trafik över varje par. Detta behövs om en agent står bakom en "adressberoende mappning" (`Address Dependent Mapping`). Detta kommer att skapa en ny "peer reflexive kandidat".
+Den kontrollerande och kontrollerade agenten skickar all trafik över varje par. Detta behövs om en agent står bakom en "adressberoende mappning" (`Address Dependent Mapping`). Detta kommer att skapa en ny "peer reflexive kandidat".
 
-Varje "kandidatpar" som lyckades skicka nätverkstrafik befordras till ett "giltigt kandidatpar". Den kontrollerande agenten nominerar sedan ett giltigt kandidatpart. Detta blir det "nominerade paret". Den kontrollerande och kontrollerade agenten försöker sedan ytterligare en runda dubbelriktad kommunikation. Om det lyckas blir det "nominerade paret" det "utvalda kandidatparet" (`Selected Candidate Pair`)! Detta par används sedan under resten av sessionen.
+Varje "kandidatpar" (`Candidate Pair`) som lyckades skicka nätverkstrafik befordras till ett "giltigt kandidatpar". Den kontrollerande agenten nominerar sedan ett giltigt kandidatpart. Detta blir det "nominerade paret". Den kontrollerande och kontrollerade agenten försöker sedan ytterligare en runda dubbelriktad kommunikation. Om det lyckas blir det "nominerade paret" det "utvalda kandidatparet" (`Selected Candidate Pair`)! Detta par används sedan under resten av sessionen.
 
 ### Startar om
 Om ditt `Selected Candidate Pair` slutar fungera av någon anledning (NAT-mappning upphör att gälla, TURN-server kraschar) kommer ICE-agenten att få status `Failed`. Båda agenterna kan startas om och kommer att göra hela processen om igen.

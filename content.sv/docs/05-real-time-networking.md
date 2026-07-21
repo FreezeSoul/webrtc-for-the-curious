@@ -4,7 +4,10 @@ type: docs
 weight: 6
 ---
 
-# Varför är nätverket så viktigt i realtidskommunikation?
+# Realtidsnätverk
+
+## Varför är nätverket så viktigt i realtidskommunikation?
+
 Nätverk är den begränsande faktorn i realtidskommunikation. I en idealisk värld skulle vi ha obegränsad bandbredd
 och paket skulle komma omedelbart. Detta är dock inte fallet. Nätverk är begränsade och villkoren
 kan ändras när som helst. Att mäta och observera nätverksförhållanden är också ett svårt problem. Du kan få olika beteenden
@@ -22,6 +25,7 @@ Kod som effektivt fungerar i alla nätverk är komplicerad. Du har många olika 
 kan alla påverka varandra på subtila sätt. Här är några av de vanligaste problemen som utvecklare stöter på.
 
 #### Bandbredd
+
 Bandbredd är den maximala datahastigheten som kan uppnås via en viss väg genom nätet. Det är viktigt att komma ihåg
 att värdet kommer att ändras under tiden. Bandbredden ändras längs en rutt (route) beroende på om fler (eller färre) människor använder den.
 
@@ -51,7 +55,7 @@ Du har kanske märkt att uppladdningshastigheter på din telefon nästan alltid 
 
 `transmission_time = rtt/2`
 
-Tekniken WebRTC använder för att mäta rundturstid beskrivs mer detaljerat i [kapitlet om RTCP Sender and Receiver Reports](../06-media-communication/#senderreceiver-reports).
+Tekniken WebRTC använder för att mäta rundturstid beskrivs mer detaljerat i [kapitlet om RTCP Sender and Receiver Reports](../06-media-communication/#mottagar--och-avsändarrapporter).
 
 #### Jitter
 Jitter är det faktum att "sändningstid" (`Transmission Time`) kan variera för varje paket. Dina paket kan bli fördröjda, men sen kommer alla på en gång.
@@ -67,7 +71,7 @@ hur stora meddelanden som helst. På protokollnivå kan meddelanden behöva dela
 MTU kommer också att skilja sig beroende på vilken nätverksväg du tar. Du kan
 använda ett protokoll som [Path MTU Discovery](https://tools.ietf.org/html/rfc1191) för att räkna ut den största paketstorleken du kan skicka utan att det måste fragmenteras.
 
-### Trängsel
+#### Trängsel
 Trängsel är när nätverksgränserna har uppnåtts. Detta beror vanligtvis på att du har nått den maximala
 bandbredd som den aktuella rutten klarar. Eller så kan det vara operatören som begränsar din datamängd per timme.
 
@@ -76,7 +80,7 @@ nätverket tappa överflödiga paket. I andra fall kommer nätverket att buffra.
 för dina paket kommer att öka. Du kan också märka mer jitter när ditt nätverk blir överbelastat. Detta här är ett område där mycket ändras
 och nya algoritmer för att upptäcka överbelastning utvecklas fortfarande.
 
-### Dynamisk
+#### Dynamisk
 Nätverk är oerhört dynamiska och förhållandena kan förändras snabbt. Under ett samtal kan du skicka och ta emot hundratusentals paket.
 Dessa paket kommer att resa genom flera nätverkshopp. De här nätverkshoppen kommer att delas med miljontals andra användare. Även i ditt lokala nätverk kan du ha
 HD-filmer som laddas ner eller kanske en enhet bestämmer sig för att ladda ner en stor programuppdatering.

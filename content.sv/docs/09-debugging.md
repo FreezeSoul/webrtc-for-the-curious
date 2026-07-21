@@ -4,19 +4,18 @@ type: docs
 weight: 10
 ---
 
-
-#Felsökning
+# Felsökning
 Felsökning av WebRTC kan vara en trixig uppgift. Det finns många rörliga delar, och de kan alla gå sönder oberoende av varandra. Om du inte är försiktig kan du förlora veckor på att kolla på fel saker. När du äntligen hittar den del som är trasig måste du lära dig mer för att förstå varför.
 
 Detta kapitel kommer att få dig att tänka på rätt sätt för att felsöka WebRTC. Det kommer att visa dig hur du bryter ner problemet. När vi känner till problemet ger vi en snabb översikt av de mest populära felsökningsverktygen.
 
-### Isolera problemet
+## Isolera problemet
 När du felsöker måste du isolera var problemet kommer ifrån. Börja från början av...
 
-#### Signalfel
+### Signalfel
 TODO!
 
-#### Nätverksfel
+### Nätverksfel
 
 Testa din STUN-server med netcat:
 
@@ -46,7 +45,7 @@ Testa din STUN-server med netcat:
 
    Förklaring:
     - `01 01` är meddelandetypen.
-    - `00 0c` är längden på datan, i det hör fallet 12 i decimaltal.
+    - `00 0c` är längden på datan, i det här fallet 12 i decimaltal.
     - `21 12 a4 42` är den magiska kakan.
     - och `54 45 53 54 54 45 53 54 54 45 53 54` (I ASCII: `TESTTESTTEST`) är ett 12-bitars transaktions-ID
     - `00 20 00 08 00 01 6f 32 7f 36 de 89` de 12-bitarna med data, som översatt blir:
@@ -70,21 +69,23 @@ XOR på en magiska kakan med bara nollor ändrar inget, så porten och adressen 
 
   - `00 01 4e 20 5e 24 7a cb` data värdet, som översatt blir:
     - `00 01` adresstyp (IPv4)
-    - `4e 20` portwn, i det hör fallet 20000 i decimal tal.
+    - `4e 20` porten, i det här fallet 20000 i decimaltal.
     - `5e 24 7a cb` är IP adressen, `94.36.122.203` i mer lättläst form.
 
-#### Säkerhetsfel
+### Säkerhetsfel
 
-#### Mediefel
+### Mediefel
 
-#### Datafel
+### Datafel
 
-### Tools of the trade
+## Praktiska verktyg
 
-#### netcat (nc)
+### netcat (nc)
+
 [netcat](https://en.wikipedia.org/wiki/Netcat) är ett nätverksverktyg för kommandoraden som kan läsa och skriva till nätverksanslutningar via TCP eller UDP. Det är vanligtvis tillgängligt som kommandot `nc`.
 
-#### tcpdump
+### tcpdump
+
 [tcpdump](https://en.wikipedia.org/wiki/Tcpdump) är ett datanätverkspaketanalysverktyg för kommandoraden.
 
 Vanliga kommandon:
@@ -98,9 +99,10 @@ Vanliga kommandon:
 
   PCAP-filen kan öppnas med Wireshark-applikationen: `wireshark stun.pcap`
 
-#### wireshark
+### wireshark
 
-#### webrtc-internals
+### webrtc-internals
+
 Chrome har en inbyggd WebRTC-statistiksida som du hittar på [chrome://webrtc-internals](chrome://webrtc-internals).
 
 ## Latens
@@ -290,7 +292,7 @@ Se till att din kodare inte använder för många I-bilder eller förlitar dig p
 Varje codecs inställningar för latensinställning är olika, men för x264 rekommenderar vi att du använder `tune=zerolatency` och `profile=baseline` för få så låg latens som möjligt.
 
 #### Nätverksfördröjning
-Nätverksfördröjningar är nog det kan göra minst åt, förutom att uppgradera till en bättre internetanslutning.
+Nätverksfördröjningar är nog det du kan göra minst åt, förutom att uppgradera till en bättre internetanslutning.
 Nätverksfördröjningar är ungefär som vädret - du kan inte stoppa regnet, men du kan kolla prognosen och ta med ett paraply.
 WebRTC mäter nätverksförhållanden med millisekundprecision.
 Viktiga mätvärden är:

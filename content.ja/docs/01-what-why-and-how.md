@@ -4,8 +4,9 @@ type: docs
 weight: 2
 ---
 
+# 何を、なぜ、どのように
 
-# WebRTCとは？
+## WebRTCとは？
 
 WebRTC とは、Web Real-Time Communication の略で、API であると同時にプロトコルでもあります。WebRTC プロトコルは、2 つの WebRTC エージェントが双方向の安全なリアルタイム通信をネゴシエートするための一連のルールです。WebRTC API は、開発者が WebRTC プロトコルを使用するためのものです。WebRTC API は、JavaScript のみで規定されています。
 
@@ -13,7 +14,7 @@ WebRTC とは、Web Real-Time Communication の略で、API であると同時�
 
 WebRTC プロトコルは、JavaScript 以外の API/言語でも利用可能です。また、WebRTC 用のサーバーやドメイン固有のツールもあります。これらの実装はすべて WebRTC プロトコルを使用しているため、相互にやりとりできます。
 
-WebRTC プロトコルは、IETF の[rtcweb](https://datatracker.ietf.org/wg/rtcweb/documents/)というワーキンググループで管理されています。WebRTC API は、W3C の[webrtc-pc](https://w3c.github.io/webrtc-pc/)で文書化されています。
+WebRTC プロトコルは、IETF の[rtcweb](https://datatracker.ietf.org/wg/rtcweb/documents/)というワーキンググループで管理されています。WebRTC API は、W3C の[webrtc](https://www.w3.org/TR/webrtc/)で文書化されています。
 
 ## なぜWebRTCを学ぶ必要があるのか？
 
@@ -44,6 +45,10 @@ WebRTC の特徴の一つは、各ステップが実のところ他の多くの�
 これらのステップはそれぞれ専用の章を設けていますが、まずは大まかに理解しておくと便利です。これらの手順はお互いに依存しているため、それぞれの手順の目的をさらに説明する際に役立ちます。
 
 ### シグナリング: WebRTCでピアがお互いを見つける方法
+
+<!-- Source code of the diagram:
+https://www.mermaidchart.com/d/f366d7bf-a952-46b3-b7e7-c09c00b19d5a -->
+![シグナリング手順概要](../../images/01-signaling-sequence-overview.png "シグナリング手順概要")
 
 WebRTC エージェントが起動したとき、WebRTC エージェントは誰と何の通信をするのかを知りません。この問題を解決するのがシグナリングです。シグナリングは、2 つの WebRTC エージェントが通信を開始できるようにするために使用されます。
 
@@ -99,54 +104,54 @@ WebRTC は多くの問題を解決していて、一見過剰な技術とさえ�
 このセクションでは、JavaScript の API がプロトコルにどのように対応するかを示します。これは、WebRTC API の広範なデモを意味するものではなく、すべてがどのように結びついているかのメンタルモデルを作成するためのものです。
 どちらにも慣れていない方でも問題ありません。このセクションは、より多くのことを学ぶために戻ってくる楽しみがあるかもしれません。
 
-#### `new RTCPeerConnection`
+### `new RTCPeerConnection`
 
 `RTCPeerConnection` は、トップレベルの「WebRTC セッション」です。これには上述のすべてのプロトコルが含まれています。サブシステムはすべて割り当てられていますが、まだ何も起こりません。
 
-#### `addTrack`
+### `addTrack`
 
 `addTrack` は新しい RTP ストリームを作成します。このストリームには、ランダムな同期ソース (SSRC) が生成されます。このストリームは、メディアセクション内の `createOffer` で生成された Session Description の中に入ります。 `addTrack` を呼び出すたびに、新しい SSRC とメディアセクションが作成されます。
 
 SRTP セッションが確立されるとすぐに、これらのメディアパケットは SRTP で暗号化された後、ICE 経由で送信され始めます。
 
-#### `createDataChannel`
+### `createDataChannel`
 
 `createDataChannel` は、SCTP アソシエーションが存在しない場合に、新しい SCTP ストリームを作成します。デフォルトでは、SCTP は有効ではなく、一方の側がデータチャネルを要求したときにのみ開始されます。
 
 DTLS セッションが確立された直後に、SCTP アソシエーションは ICE を経由して DTLS で暗号化されたパケットの送信を開始します。
 
-#### `createOffer`
+### `createOffer`
 
 `createOffer` は、リモートピアと共有するローカルステートの Session Description を生成します。
 
 `createOffer` を呼び出しても、ローカルピアは何も変わりません。
 
-#### `setLocalDescription`
+### `setLocalDescription`
 
 `setLocalDescription` は要求されたすべての変更をコミットします。`addTrack`, `createDataChannel` などの呼び出しは、この呼び出しまではすべて一時的なものです。 `setLocalDescription` は `createOffer` で生成された値で呼び出されます。
 
 通常、この呼び出しの後、リモートピアにオファーを送信し、リモートピアはそれを使って `setRemoteDescription` を呼び出します。
 
-#### `setRemoteDescription`
+### `setRemoteDescription`
 
-`setRemoteDescription` は、リモート候補の状態をローカルエージェントに通知する方法です。これは、JavaScript の API で「シグナリング」という行為を行う方法です。
+`setRemoteDescription` は、リモート候補の状態をローカルエージェントに通知する方法です。これは、JavaScript の API で「シグナリング」をする方法です。
 
 双方で `setRemoteDescription` が呼び出されると、WebRTC エージェントは P2P 通信を開始するのに十分な情報を得ることができます!
 
-#### `addIceCandidate`
+### `addIceCandidate`
 
 `addIceCandidate` を使うと、WebRTC エージェントはいつでも好きなときにリモートの ICE 候補を追加できます。この API は ICE サブシステムに ICE Candidate を直接送信し、大規模な WebRTC 接続には他の影響を与えません。
 
-#### `ontrack`
+### `ontrack`
 
 `ontrack` は、リモートピアから RTP パケットを受信したときに起動されるコールバックです。受信パケットは、`setRemoteDescription` に渡された Session Description で宣言されているはずです。
 
 WebRTC は SSRC を使用して、関連する `MediaStream` と `MediaStreamTrack` を検索し、これらの詳細が入力された状態でこのコールバックを起動します。
 
-#### `oniceconnectionstatechange`
+### `oniceconnectionstatechange`
 
 `oniceconnectionstatechange` は、ICE エージェントの状態を反映して起動されるコールバックです。ネットワークに接続されたときや、切断されたときに、このように通知されます。
 
-#### `onconnectionstatechange`
+### `onconnectionstatechange`
 
 `onconnectionstatechange` は、ICE エージェントと DTLS エージェントの状態を組み合わせたものです。これを見ることで、ICE と DTLS の両方が正常に完了したときに通知を受けることができます。

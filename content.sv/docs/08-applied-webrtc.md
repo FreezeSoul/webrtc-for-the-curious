@@ -127,7 +127,7 @@ flexibilitet tillåter oss att implementera båda.
 En-till-en är den första anslutningstypen du använder med WebRTC. Du ansluter två WebRTC-agenter direkt och de kan skicka dubbelriktad media och data.
 Anslutningen ser ut så här.
 
-![En-till-en](../images/08-one-to-one.png "En-till-en")
+![En-till-en](../../images/08-one-to-one.png "En-till-en")
 
 ### Full Mesh
 Full mesh är svaret om du vill bygga ett konferenssamtal eller ett multiplayer-spel. I denna topologi upprättar varje användare en anslutning
@@ -142,7 +142,7 @@ På grund av dessa problem används ett Full Mesh bäst för små grupper. För 
 ![Full mesh](../../images/08-full-mesh.png "Full mesh")
 
 ### Hybrid Mesh
-Hybrid Mesh är ett alternativ till Full Mesh som kan lindra några av problemen mett ett Full Mesh. I en Hybrid Mesh-anslutning upprättas inte
+Hybrid Mesh är ett alternativ till Full Mesh som kan lindra några av problemen med ett Full Mesh. I en Hybrid Mesh-anslutning upprättas inte anslutningar
 mellan varje användare. Istället vidarebefordras media genom andra klienter i nätverket. Detta betyder att avsändaren av media inte behöver använda lika
 mycket bandbredd för att distribuera media.
 

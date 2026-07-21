@@ -4,7 +4,10 @@ type: docs
 weight: 6
 ---
 
-# Why is networking so important in Real-time communication?
+# Real-time Networking
+
+## Why is networking so important in Real-time communication?
+
 Networks are the limiting factor in Real-time communication. In an ideal world we would have unlimited bandwidth
 and packets would arrive instantaneously. This isn't the case though. Networks are limited, and the conditions
 could change at anytime. Measuring and observing network conditions is also a difficult problem. You can get different behaviors
@@ -52,7 +55,7 @@ You may have noticed that upload speeds on your phone are almost always lower th
 
 `transmission_time = rtt/2`
 
-The technicalities of round-trip time measurement are described in greater detail in [RTCP Sender and Receiver Reports chapter](../06-media-communication/#senderreceiver-reports).
+The technicalities of round-trip time measurement are described in greater detail in [RTCP Sender and Receiver Reports chapter](../06-media-communication/#receiver-reports--sender-reports).
 
 #### Jitter
 Jitter is the fact that `Transmission Time` may vary for each packet. Your packets could be delayed, but then arrive in bursts.

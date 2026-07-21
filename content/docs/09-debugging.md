@@ -10,12 +10,13 @@ Debugging WebRTC can be a daunting task. There are a lot of moving parts, and th
 
 This chapter will get you in the mindset to debug WebRTC. It will show you how to break down the problem. After we know the problem, we will give a quick tour of the popular debugging tools.
 
-### Isolate The Problem
+## Isolate The Problem
+
 When debugging, you need to isolate where the issue is coming from. Start from the beginning of the...
 
-#### Signaling Failure
+### Signaling Failure
 
-#### Networking Failure
+### Networking Failure
 
 Test your STUN server using netcat:
 
@@ -72,16 +73,20 @@ XOR-ing against the dummy magic cookie is idempotent, so the port and address wi
     - `4e 20` is the mapped port, which decodes to 20000 in decimal
     - `5e 24 7a cb` is the IP address, which decodes to `94.36.122.203` in dotted-decimal notation.
 
-#### Security Failure
-#### Media Failure
-#### Data Failure
+### Security Failure
 
-### Tools of the trade
+### Media Failure
 
-#### netcat (nc)
+### Data Failure
+
+## Tools of the trade
+
+### netcat (nc)
+
 [netcat](https://en.wikipedia.org/wiki/Netcat) is command-line networking utility for reading from and writing to network connections using TCP or UDP. It is typically available as the `nc` command.
 
-#### tcpdump
+### tcpdump
+
 [tcpdump](https://en.wikipedia.org/wiki/Tcpdump) is a command-line data-network packet analyzer.
 
 Common commands:
@@ -95,12 +100,21 @@ Common commands:
 
   The PCAP file can be opened with the Wireshark application: `wireshark stun.pcap`
 
-#### Wireshark
+### Wireshark
 
 [Wireshark](https://www.wireshark.org) is a widely-used network protocol analyzer.
 
-#### webrtc-internals
-Chrome comes with a built-in WebRTC statistics page available at [chrome://webrtc-internals](chrome://webrtc-internals).
+### WebRTC browser tools
+
+Browsers come with built-in tools that you can use to inspect the connections you make. Chrome has [`chrome://webrtc-internals`](chrome://webrtc-internals) and [`chrome://webrtc-logs`](chrome://webrtc-logs). Firefox has [`about:webrtc`](about:webrtc).
+
+### rtcStats
+
+[rtcStats](https://rtcstats.com) is an open source collection layer and analysis tool for WebRTC sessions. The client SDK [rtcstats-js](https://github.com/rtcstats/rtcstats-js) instruments your application's `getStats()` calls, and the self-hosted [rtcstats-server](https://github.com/rtcstats/rtcstats-server) collects and forwards sessions for analysis. You can also upload a webrtc-internals export directly.
+
+Given a session, rtcStats produces a set of Observations (the moments that mattered), Deductions (what those signals indicate about call quality), an Experience Score, and a plain-English summary. This is useful when you need to analyze sessions at scale or want structured pattern recognition on top of raw `getStats()` output rather than reading it manually.
+
+The collection layer is self-hosted. You decide which sessions to capture and forward. A free plan is available at [rtcstats.com](https://rtcstats.com) if you want to upload a dump and see the analysis without setting up the SDK first.
 
 ## Latency
 How do you know you have high latency? You may have noticed that your video is lagging, but do you know precisely how much it is lagging? 
@@ -322,7 +336,7 @@ The receiver _waits_ for the retransmission of the packet.
 Such retransmissions cause increased latency.
 The number of NACK packets sent and received is recorded in WebRTC's built-in stats fields [outbound stream nackCount](https://www.w3.org/TR/webrtc-stats/#dom-rtcoutboundrtpstreamstats-nackcount) and [inbound stream nackCount](https://www.w3.org/TR/webrtc-stats/#dom-rtcinboundrtpstreamstats-nackcount).
 
-You can see nice graphs of inbound and outbound `nackCount` on the [webrtc internals page](#webrtc-internals). 
+You can see nice graphs of inbound and outbound `nackCount` on the [webrtc internals page](#webrtc-browser-tools). 
 If you see the `nackCount` increasing, it means the network is experiencing high packet loss, and the WebRTC stack is doing its best to create a smooth video/audio experience despite that.
 
 When packet loss is so high that the decoder is unable to produce an image, or subsequent dependent images like in the case of a fully lost I-frame, all future P-frames will not be decoded. 
@@ -331,11 +345,11 @@ Once the sender receives a `PLI`, it will produce a new I-frame to help the rece
 I-frames are normally larger in size than P-frames. This increases the number of packets that need to be transmitted.
 Like with NACK messages, the receiver will need to wait for the new I-frame, introducing additional latency.
 
-Watch for `pliCount` on the [webrtc internals page](#webrtc-internals). If it increases, tweak your encoder to produce less packets or enable a more error resilient mode.
+Watch for `pliCount` on the [webrtc internals page](#webrtc-browser-tools). If it increases, tweak your encoder to produce less packets or enable a more error resilient mode.
 
 #### Receiver side latency
 Latency will be affected by packets arriving out of order.
 If the bottom half of the image packet comes before the top you would have to wait for the top before decoding.
-This is explained in the [Solving Jitter](05-real-time-networking/#solving-jitter) chapter in great detail.
+This is explained in the [Solving Jitter](../05-real-time-networking/#solving-jitter) chapter in great detail.
 
 You can also refer to the built-in [jitterBufferDelay](https://www.w3.org/TR/webrtc-stats/#dom-rtcinboundrtpstreamstats-jitterbufferdelay) metric to see how long a frame was held in the receive buffer, waiting for all of its packets until it was released to the decoder.

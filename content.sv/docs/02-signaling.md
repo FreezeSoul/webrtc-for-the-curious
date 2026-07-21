@@ -4,7 +4,10 @@ type: docs
 weight: 3
 ---
 
-# Vad är WebRTC-signalering?
+# Signalering
+
+## Vad är WebRTC-signalering?
+
 När du skapar en WebRTC-agent vet den ingenting om den andra parten. Den har ingen aning om vem den kommer att ansluta till eller vad för data de ska skicka!
 Signalering är den första konfigureringen som gör ett samtal möjligt. Efter att dessa värden har utbytts kan WebRTC-agenterna kommunicera direkt med varandra.
 
@@ -27,7 +30,7 @@ En mediebeskrivning beskriver vanligtvis en enda ström av media. Så om du vill
 ### Hur man läser SDP
 Varje rad i en sessionsbeskrivning börjar med ett enda tecken, det här är din nyckel. Det kommer sedan att följas av ett likhetstecken. Allt efter det lika tecknet är värdet. När värdet är klart kommer du att ha en ny rad.
 
-Session Description Protocol definierar alla nycklar som är giltiga. Du kan bara använda bokstäver för nycklar enligt definitionen i protokollet. Dessa tangenter har alla betydande betydelse, vilket kommer att förklaras senare.
+Session Description Protocol definierar alla nycklar som är giltiga. Du kan bara använda bokstäver för nycklar enligt definitionen i protokollet. Dessa nycklar har alla betydande betydelse, vilket kommer att förklaras senare.
 
 Här är ett exempel på en del av en sessionsbeskrivning:
 
@@ -67,7 +70,7 @@ a=rtpmap:96 VP8/90000
 a=my-sdp-value
 ```
 
-Du har två medibeskrivningar, en av typ av ljud med FMT `111` och en av typ av video med formatet `96`. Den första mediebeskrivningen har bara ett attribut. Detta attribut specificerar att Payload Type är `111` för Opus.
+Du har två medibeskrivningar, en av typ ljud med fmt `111` och en av typ video med formatet `96`. Den första mediebeskrivningen har bara ett attribut. Detta attribut specificerar att Payload Type är `111` för Opus.
 Den andra mediebeskrivningen har två attribut. Det första attributet specificerar Payload Type är `96` för VP8, och det andra attributet är helt enkelt bara `my-sdp-value`.
 
 ### Ett komplett exempel
@@ -117,35 +120,38 @@ Varje mediebeskrivning i WebRTC har ett riktningsattribut (direction attribute).
 
 Nedan är en lista över några vanliga attribut som du kommer att se i en sessionsbeskrivning från en WebRTC-agent. Många av dessa värden styr delsystem som vi ännu inte har diskuterat.
 
-##### `grupp:BUNDLE`
+#### `group:BUNDLE`
 Bundling är när man kör flera typer av trafik över en och samma anslutning. Vissa WebRTC-implementeringar använder en dedikerad anslutning per mediaström. Buntning är att föredra.
 
-##### `fingerprint:sha-256`
+#### `fingerprint:sha-256`
 Detta är en hash av certifikatet som en part använder för DTLS. När DTLS-handskakningen är klar jämför du detta med det faktiska certifikatet för att bekräfta att du kommunicerar med den du har förväntat dig.
 
-##### `setup:`
+#### `setup:`
 Detta kontrollerar beteendet för DTLS-agenten. Detta avgör om det körs som en klient eller server efter att ICE har anslutit. De möjliga värdena är:
 
-* `setup: active` - Kör som DTLS-klient.
-* `setup: passive` - Kör som DTLS-server.
-* `setup: actpass` - Be den andra WebRTC-agenten att välja.
+* `setup:active`  - Kör som DTLS-klient.
+* `setup:passive` - Kör som DTLS-server.
+* `setup:actpass` - Be den andra WebRTC-agenten att välja.
 
-##### `ice-ufrag`
+#### `mid`
+Attributet "mid" används för att identifiera mediaströmmar i en sessionsbeskrivning.
+
+#### `ice-ufrag`
 Detta är användarfragmentvärdet för ICE-agenten. Används för verifiering av ICE trafik.
 
-##### `ice-pwd`
+#### `ice-pwd`
 Detta är lösenordet för ICE-agenten. Används för autentisering av ICE trafik.
 
-##### `rtpmap`
+#### `rtpmap`
 Detta värde används för att koppla en specifik kodek till en RTP Payload Type. Payload Types är inte statiska, så för varje samtal bestämmer avsändaren typen för varje kodek.
 
-##### `fmtp`
+#### `fmtp`
 Definierar ytterligare värden för en Payload Type. Detta är användbart för att kommunicera en viss videoprofil eller kodekinställning.
 
-##### `candidate`
+#### `candidate`
 Detta är en ICE-kandidat som kommer från ICE-agenten. Det här är en möjlig adress som WebRTC-agenten är tillgänglig på. Dessa förklaras i mer detalj i nästa kapitel.
 
-##### `ssrc`
+#### `ssrc`
 En synkroniseringskälla (SSRC) definierar ett enda mediaströmspår.
 
 `label` är ID:t för den individuella strömmen. `mslabel` är ID:t för en container som kan innehålla flera strömmar.

@@ -6,7 +6,9 @@ weight: 2
 
 <div dir="rtl">
 
-# WebRTC چیست؟
+# چه چیزی، چرا و چگونه
+
+## WebRTC چیست؟
 
 WebRTC، که اختصاری برای Web Real-Time Communication می باشد، هم یک API و هم یک پروتکل است. پروتکل WebRTC مجموعه ای از قوانین برای دو نماینده WebRTC برای مذاکره دو طرفه و ایمن در زمان بی درنگ است. WebRTC API نیز به توسعه دهنگان اجازه می دهد که از پروتکل WebRTC استفاده کنند. WebRTC API فقط برای زبان جاوا اسکریپت است. 
 
@@ -14,7 +16,7 @@ WebRTC، که اختصاری برای Web Real-Time Communication می باشد�
 
 پرونکل WebRTC در API ها و زبان های دیگر علاوه بر جاوا اسکریپت وجود دارد. شما می توانید سرورها و همچنین ابزار های domain-specific را پیدا کنید. همه ی این پیاده سازی ها از پروتکل WebRTC استفاده می کنند بنابراین آن ها می توانند با یکدیگر تعامل داشته باشند.
 
-پروتکل WebRTC در IETF و در گروه کاری [rtcweb](https://datatracker.ietf.org/wg/rtcweb/documents/) نگهداری می شود.    WebRTC API  نیز در W3C تحت عنوان [webrtc-pc](https://w3c.github.io/webrtc-pc/) مستند سازی شده است.
+پروتکل WebRTC در IETF و در گروه کاری [rtcweb](https://datatracker.ietf.org/wg/rtcweb/documents/) نگهداری می شود.    WebRTC API  نیز در W3C تحت عنوان [webrtc](https://www.w3.org/TR/webrtc/) مستند سازی شده است.
 
 ## چرا باید WebRTC را یاد بگیرم؟
 
@@ -100,54 +102,54 @@ WebRTC بسیاری از مشکلات را حل می کند. در ابتدا، �
 این بخش نشان می دهد که چگونه API جاوا اسکریپت به پروتکل نگاشت می شود. این یک نسخه نمایشی گسترده از WebRTC API نیست، بلکه بیشتر برای ایجاد یک مدل ذهنی از نحوه پیوند آن با یکدیگر است.
 اگر با هیچکدام آشنا نیستید، اشکالی ندارد. این می تواند یک بخش سرگرم‌کننده برای یادگیری بیشتر برای شما باشد!
 
-#### `new RTCPeerConnection`
+### `new RTCPeerConnection`
 `RTCPeerConnection` سطح بالای "نشست WebRTC"  است. این شامل تمام پروتکل های ذکر شده در بالا است. زیرسیستم ها همه تخصیص داده شده اند اما هنوز هیچ اتفاقی نمی افتد.
 
-#### `addTrack`
+### `addTrack`
 
 `addTrack` یک جریان RTP جدید ایجاد می کند. یک منبع همگام سازی تصادفی (SSRC) برای این جریان ایجاد می شود. سپس این جریان در قسمت توضیحات جلسه ایجاد شده توسط `createOffer` در یک بخش رسانه قرار خواهد گرفت. هر تماس با `addTrack` یک بخش رسانه و SSRC جدید ایجاد می کند.
 
 بلافاصله پس از ایجاد یک جلسه SRTP، این بسته های رسانه ای پس از رمزگذاری با استفاده از SRTP از طریق ICE ارسال می شوند.
 
-#### `createDataChannel`
+### `createDataChannel`
 
 `createDataChannel` در صورت عدم وجود ارتباط SCTP، یک جریان SCTP جدید ایجاد می کند. به طور پیش‌فرض، SCTP فعال نیست، اما تنها زمانی شروع می‌شود که یک طرف درخواست کانال داده را داشته باشد.
 
 بلافاصله پس از ایجاد یک جلسه DTLS، انجمن SCTP شروع به ارسال بسته ها از طریق ICE و رمزگذاری شده با DTLS می کند.
 
-#### `createOffer`
+### `createOffer`
 
 `createOffer` یک Session Description از وضعیت محلی ایجاد می کند تا با همتای راه دور به اشتراک گذاشته شود.
 
 عمل فراخوانی `createOffer` چیزی را برای همتای محلی تغییر نمی‌دهد.
 
-#### `setLocalDescription`
+### `setLocalDescription`
 
 `setLocalDescription` هر گونه تغییر درخواستی را انجام می دهد. `addTrack`، `createDataChannel` و تماس‌های مشابه همگی تا برقراری این تماس، به تعویق می افتد. `setLocalDescription` با مقدار ایجاد شده توسط `createOffer` فراخوانی می شود.
 
 معمولاً پس از این تماس، پیشنهاد را برای همتای راه دور ارسال می‌کنید و آنها با آن `setRemoteDescription` را فراخوانی می‌کنند.
 
-#### `setRemoteDescription`
+### `setRemoteDescription`
 
 `setRemoteDescription` نحوه اطلاع رسانی به نماینده محلی در مورد وضعیت داوطلب ها راه دور است. به این ترتیب عمل 'سیگنالینگ' با API جاوا اسکریپت انجام می شود.
 
 وقتی `setRemoteDescription` از هر دو طرف فراخوانی شد، نمایندگان WebRTC اکنون اطلاعات کافی برای شروع ارتباط Peer-To-Peer (P2P) را دارند!
 
-#### `addIceCandidate`
+### `addIceCandidate`
 
 `addIceCandidate` به یک نماینده WebRTC اجازه می‌دهد تا هر زمان که بخواهد، نامزدهای ICE  راه دور بیشتری را اضافه کند. این ICE Candidate ،API را مستقیماً به زیرسیستم ICE می فرستد و تأثیر بیشتر دیگری بر اتصال WebRTC  ندارد.
 
-#### `ontrack`
+### `ontrack`
 
 `ontrack` یک تابع بازگشتی است که زمانی که بسته RTP از همتای راه دور دریافت می‌شود، فعال می‌شود. بسته‌های دریافتی باید در توضیحات جلسه که به `setRemoteDescription` ارسال شده بود، تعیین شده باشند.
 
 WebRTC از SSRC استفاده می‌کند و توابع بازگشتی `MediaStream` و `MediaStreamTrack` مرتبط این جزئیات فراخوانی می‌کند.
 
-#### `oniceconnectionstatechange`
+### `oniceconnectionstatechange`
 
 `oniceconnectionstatechange` یک تابع بازگشتی است که وضعیت عامل ICE را فراخوانی می‌کند. هنگامی که شما به شبکه متصل هستید یا زمانی که اتصال شما قطع می شود به این ترتیب به شما اطلاع داده می شود.
 
-#### `onconnectionstatechange`
+### `onconnectionstatechange`
 
 `onconnectionstatechange` ترکیبی از ICE Agent و وضعیت عامل DTLS است. این می‌تواند شما را زمانی که ICE و DTLS هر دو با موفقیت تکمیل شدند مطلع کند.
 </div>

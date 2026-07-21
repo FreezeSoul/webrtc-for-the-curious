@@ -4,7 +4,10 @@ type: docs
 weight: 8
 ---
 
-# What do I get from WebRTC's data communication?
+# Data Communication
+
+## What do I get from WebRTC's data communication?
+
 WebRTC provides data channels for data communication. Between two peers you can open 65,534 data channels.
 A data channel is datagram based, and each has its own durability settings. By default, each data channel has guaranteed ordered delivery.
 
@@ -112,7 +115,7 @@ Association is the term used for an SCTP Session. It is the state that is shared
 between two SCTP Agents while they communicate.
 
 ### Streams
-A stream is one bi-directional sequence of user data. When you create a data channel you are actually just creating a SCTP stream. Each SCTP Association contains a list of streams. Each stream can be configured with different reliability types.
+A stream is one bi-directional sequence of user data. When you create a data channel you are actually just creating an SCTP stream. Each SCTP Association contains a list of streams. Each stream can be configured with different reliability types.
 
 WebRTC only allows you to configure on stream creation, but SCTP actually allows changing the configuration at anytime.
 

@@ -10,6 +10,16 @@ DefaultContentLanguage = "en"
     title = "WebRTC for the Curious"
     languageName = "English"
     weight = 1
+  [languages.ko]
+    title = "호기심 많은 이를 위한 WebRTC"
+    languageName = "한국어"
+    contentDir = "content.kr"
+    weight = 10
+  [languages.ru]
+    title = "WebRTC для любопытных"
+    languageName = 'Русский'
+    contentDir = "content.ru"
+    weight = 2
   [languages.sv]
     title = "WebRTC för nyfikna"
     languageName = "Svenska"
@@ -25,22 +35,45 @@ DefaultContentLanguage = "en"
     languageName = "日本語"
     contentDir = "content.ja"
     weight = 4
-#  [languages.tr]
-#    title = "WebRTC for the Curious -- TODO Translate to Turkish"
-#    languageName = "Turkish"
-#    contentDir = "content.tr"
-#    weight = 2
-#  [languages.fa]
-#    title = "WebRTC برای کنجکاوها"
-#    languageName = "Persian"
-#    languagedirection = "rtl"
-#    contentDir = "content.fa"
-#    weight = 3
+  [languages.fa]
+    title = "WebRTC برای کنجکاوها"
+    languageName = "Persian"
+    languagedirection = "rtl"
+    contentDir = "content.fa"
+    weight = 5
+  [languages.fr]
+    title = "WebRTC pour les curieux"
+    languageName = "Français"
+    contentDir = "content.fr"
+    weight = 6
+  [languages.id]
+    title = "WebRTC untuk yang Ingin Tahu"
+    languageName = "Bahasa Indonesia"
+    contentDir = "content.id"
+    weight = 7
+  [languages.es]
+    title = "WebRTC para los curiosos"
+    languageName = "Español"
+    contentDir = "content.es"
+    weight = 8
+  [languages.tr]
+    title = "WebRTC Meraklıları İçin"
+    languageName = "Türkçe"
+    contentDir = "content.tr"
+    weight = 9
 
 [params]
+  # automatically match the user's system color scheme preference.
+  BookTheme = 'auto'
+
   # source repository location.
   # Used for 'Last Modified' and 'Edit this page' links.
   BookRepo = 'https://github.com/webrtc-for-the-curious/webrtc-for-the-curious'
 
   # 'Edit this page' links
   BookEditPath = 'edit/master'
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
